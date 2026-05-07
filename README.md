@@ -91,7 +91,7 @@ Operationalized:
 
 **The part that works:**
 - Typing `@Docs` opens a picker; type-ahead filtering operates correctly.
-- Typing `@Docs Pyd` correctly surfaces both **Pydantic** (built-in / Official curated) and **Pydantic AI** (user-added) entries _(screenshot 05)_.
+- Typing `@Docs Py` correctly surfaces both **Pydantic** (built-in / Official curated) and **Pydantic AI** (user-added) entries _(screenshot 05)_.
 - User-added docs appear in the same picker as built-in curated docs once the user starts typing.
 
 **The part that doesn't:**
@@ -110,7 +110,7 @@ A user opening the picker for the first time, expecting to see their just-added 
 
 ![Scrolled to the bottom of the picker — still only A-prefix; the list ends here without ever showing B or beyond](cursor-docs-audit-2026-05-06/08_at-menu-built-in-docs-no-pydantic-visible.png)
 
-After typing `Pyd`, the built-in **Pydantic** entry surfaces — proving the picker *can* reach non-A entries once typing begins; they were not missing, just hidden in the default render:
+After typing `Py`, the built-in **Pydantic** entry surfaces — proving the picker *can* reach non-A entries once typing begins; they were not missing, just hidden in the default render:
 
 ![Filtered picker — built-in Pydantic surfaces once typing starts](cursor-docs-audit-2026-05-06/05_at-menu-manual-pydantic-visible.png)
 

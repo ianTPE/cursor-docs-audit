@@ -94,7 +94,7 @@ Cursor 社群論壇的討論串 [Cursor @Docs feature STILL BROKEN](https://foru
 
 **正常運作的部分：**
 - 輸入 `@Docs` 會打開一個選擇器；輸入提示過濾（type-ahead filtering）運作正常。
-- 輸入 `@Docs Pyd` 會正確地同時顯示 **Pydantic**（內建 / 官方精選）和 **Pydantic AI**（使用者新增）的項目 _(截圖 05)_。
+- 輸入 `@Docs Py` 會正確地同時顯示 **Pydantic**（內建 / 官方精選）和 **Pydantic AI**（使用者新增）的項目 _(截圖 05)_。
 - 一旦使用者開始輸入，使用者新增的文件就會與內建的精選文件出現在同一個選擇器中。
 
 **未能運作的部分：**
@@ -113,7 +113,7 @@ UI 上缺少了什麼提示（affordance）：
 
 ![捲動到選擇器底部 — 依然只有 A 開頭；清單在此結束，永遠不會顯示 B 或之後的字母](cursor-docs-audit-2026-05-06/08_at-menu-built-in-docs-no-pydantic-visible.png)
 
-輸入 `Pyd` 後，內建的 **Pydantic** 項目就浮現了 —— 證明選擇器在開始打字後*確實能夠*觸及非 A 開頭的項目；它們並未消失，只是被隱藏在預設的渲染視圖中：
+輸入 `Py` 後，內建的 **Pydantic** 項目就浮現了 —— 證明選擇器在開始打字後*確實能夠*觸及非 A 開頭的項目；它們並未消失，只是被隱藏在預設的渲染視圖中：
 
 ![已過濾的選擇器 — 一旦開始輸入，內建的 Pydantic 就會浮現](cursor-docs-audit-2026-05-06/05_at-menu-manual-pydantic-visible.png)
 
@@ -152,7 +152,7 @@ UI 上缺少了什麼提示（affordance）：
 
 **一般使用者的操作路徑：**
 
-一個想要尋找 Pydantic AI（Agent 框架）文件上下文的一般 Cursor 使用者，會輸入 `@Docs Pyd`，然後看到內建的 **Pydantic** 項目。他們選擇了它 —— 這是顯而易見的匹配項目。接著，他們問了一個關於 `Agent(...)` 建構函式參數的問題。
+一個想要尋找 Pydantic AI（Agent 框架）文件上下文的一般 Cursor 使用者，會輸入 `@Docs Py`，然後看到內建的 **Pydantic** 項目。他們選擇了它 —— 這是顯而易見的匹配項目。接著，他們問了一個關於 `Agent(...)` 建構函式參數的問題。
 
 一般使用者**並不知道**，也沒有理由知道：
 
