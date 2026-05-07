@@ -175,6 +175,12 @@ The same query (Query B: default value of `Agent()`'s `retries` parameter) was r
 
 ![Query B with user-added Pydantic AI doc selected — verbatim markdown table row from /api/agent/](cursor-docs-audit-2026-05-06/13_prompt-manual-pydantic-ai-success-retries.png)
 
+**A stricter test of the same inversion (different query, web access enabled):**
+
+Query B's `retries=1` is technically a value the base model could plausibly guess from training data, weakening the "no @Docs + web enabled is best" claim in the table's first row. To rule that out, the same no-@Docs + web-enabled configuration was retested with a query the base model cannot answer from memory: the breaking-change rename `result_type → output_type` in Pydantic AI's `Agent()` constructor. With web access enabled and no `@Docs` attached, autonomous fetch correctly identifies `output_type: OutputSpec[OutputDataT]` (default `str`), reproduces the full current constructor signature — including recently-added parameters (`capabilities`, `history_processors`, `event_stream_handler`) that post-date typical base-model training cutoffs — and cites `https://ai.pydantic.dev/api/agent/`. A renamed parameter and parameters that did not exist when the base model was trained cannot both be produced verbatim from memory; the correct answer is therefore evidence of live retrieval, not recall.
+
+![No @Docs, web enabled — autonomous fetch correctly resolves the result_type → output_type rename and lists the current Agent() constructor signature](cursor-docs-audit-2026-05-06/14_prompt-no-docs-web-fetch-success-output-type.png)
+
 **The structural inversion:**
 
 With web access enabled — Cursor's default — *not using @Docs at all* produces the best answer: autonomous web fetch retrieves the correct page and the model quotes it verbatim. Attaching the built-in Official `📖 Pydantic` produces the *worst* answer: the model trusts the attached index, finds nothing relevant, and refuses. The user went from "model can find the right answer" to "model can't answer" **by clicking the @Docs button and selecting what looked like the obvious match.** The model prioritizes the indexed content it is explicitly given over its own web fetch, so a wrong-scope or stale built-in entry actively replaces a more reliable fallback with a refusal (or, in the staleness case, with a stale answer).
@@ -322,6 +328,7 @@ All screenshots are in `cursor-docs-audit-2026-05-06/` adjacent to this file.
 | `11_prompt-no-docs-retries-cannot-quote.png` | Query B (retries), Ask mode, no @Docs — base model hedges, guesses `1` |
 | `12_prompt-built-in-docs-cannot-quote.png` | Query B with `📖 Pydantic` (built-in, validation lib) — refuses |
 | `13_prompt-manual-pydantic-ai-success-retries.png` | Query B with `📖 Pydantic AI` (user-added) — verbatim table row |
+| `14_prompt-no-docs-web-fetch-success-output-type.png` | No @Docs, web enabled — autonomous fetch resolves the `result_type → output_type` rename and lists the current `Agent()` constructor signature; stricter test of Finding 3's table row 1 |
 
 ---
 

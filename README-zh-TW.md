@@ -178,6 +178,12 @@ UI 上缺少了什麼提示（affordance）：
 
 ![選擇使用者新增的 Pydantic AI 文件的查詢 B — 來自 /api/agent/ 的逐字 Markdown 表格列](cursor-docs-audit-2026-05-06/13_prompt-manual-pydantic-ai-success-retries.png)
 
+**針對相同倒置現象的更嚴格測試（不同查詢，網路存取已啟用）：**
+
+查詢 B 的 `retries=1` 在技術上是基礎模型可能從訓練資料中合理猜測出的數值，這削弱了表格第一列中「無 @Docs + 啟用網路會得到最佳結果」的主張。為了排除這個可能性，我們使用基礎模型無法單憑記憶回答的查詢，在相同的「無 @Docs + 啟用網路」設定下重新測試：詢問 Pydantic AI `Agent()` 建構函式中包含破壞性變更的重新命名參數 `result_type → output_type`。在啟用網路存取且不附加 `@Docs` 的情況下，自動網頁抓取正確地識別出 `output_type: OutputSpec[OutputDataT]`（預設值為 `str`），並重現了當前建構函式的完整簽名 —— 包括晚於一般基礎模型訓練截止時間才新增的參數（如 `capabilities`、`history_processors`、`event_stream_handler`）—— 並引用了 `https://ai.pydantic.dev/api/agent/`。一個被重新命名的參數，加上模型訓練時還不存在的新參數，這兩者不可能同時單憑記憶逐字生成；因此，正確答案便是即時檢索（live retrieval）而非記憶提取（recall）的有力證據。
+
+![無 @Docs，啟用網路 —— 自動網頁抓取正確解析了 result_type → output_type 的重新命名，並列出當前 Agent() 建構函式的簽名](cursor-docs-audit-2026-05-06/14_prompt-no-docs-web-fetch-success-output-type.png)
+
 **結構性的倒置 (The structural inversion)：**
 
 在啟用網路存取（Cursor 預設值）的情況下，*完全不使用 @Docs* 會產生最好的答案：自動網頁抓取會檢索正確的頁面，且模型會逐字引用。附加內建的官方 `📖 Pydantic` 卻會產生*最糟*的答案：模型信任附加的索引，找不到相關資訊，於是拒絕回答。使用者**僅僅因為點擊了 @Docs 按鈕並選擇了看似理所當然的匹配項目**，就從「模型能找到正確答案」變成了「模型無法回答」。模型會優先採用明確給定的索引內容，勝過自身的網頁抓取，因此範圍錯誤或過時的內建項目會主動用拒答（或者在過時的情況下，用過時的答案）來取代原本更可靠的備用方案。
@@ -325,6 +331,7 @@ UI 上缺少了什麼提示（affordance）：
 | `11_prompt-no-docs-retries-cannot-quote.png` | 查詢 B (retries)，Ask 模式，無 @Docs —— 基礎模型迴避，猜測 `1` |
 | `12_prompt-built-in-docs-cannot-quote.png` | 查詢 B 附加 `📖 Pydantic` (內建，驗證庫) —— 拒絕 |
 | `13_prompt-manual-pydantic-ai-success-retries.png` | 查詢 B 附加 `📖 Pydantic AI` (使用者新增) —— 逐字表格列 |
+| `14_prompt-no-docs-web-fetch-success-output-type.png` | 無 @Docs，啟用網路 —— 自動網頁抓取解析了 `result_type → output_type` 的重新命名，並列出當前 `Agent()` 建構函式簽名；針對發現 3 表格第一列的更嚴格測試 |
 
 ---
 
